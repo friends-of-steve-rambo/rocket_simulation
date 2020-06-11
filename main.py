@@ -8,15 +8,17 @@ import pygame
 from pygame import *
 from physics import *
 
-done_all = False
-zoom = 0.25
-planet_center = False
-angle = longitude = speed_vect = 90
-landed = True
-sim_speed = 1
+done_all = False  # Флаг завершения main loop
+zoom = 0.25  # Приближение камеры
+planet_center = False  # Положение камеры
+angle = 90  # Угол наклона ракеты
+longitude = 90  # Угол относительно нормали к поверхности планеты
+speed_vect = 90  # Угол относительно вектора скорости
+landed = True  # Флаг совершенной посадки
+sim_speed = 1  # Ускорение времени
 FPS = 100
-dt = sim_speed/FPS
-lag = False
+dt = sim_speed/FPS  # Интервал моделирования
+lag = False  # Флаг на случай просадок фпс для компенсации расчета времени
 
 def main():
     global zoom, planet_center, angle, longitude, speed_vect, FPS, dt, \
@@ -37,10 +39,10 @@ def main():
     pygame.display.set_icon(pygame.image.load('img/rocket.png'))
 
     # Флаги остановки, паузы, управления
-    done = False
+    done = False  # Флаг завершения игры
     debuginfo = True
     an_plus = an_minus = False
-    eng_on = False  # Включен ли двигатель?
+    eng_on = False  # Двигатель вкл\выкл
 
     # Максимумы
     max_speed = max_dist = 0.0
