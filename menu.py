@@ -23,14 +23,14 @@ def menu():
     dry_mass = float(ui.plainTextEdit_4.toPlainText())  # 5000 кг
     fuel_mass = float(ui.plainTextEdit_3.toPlainText())  # 10000 кг
     u = float(ui.plainTextEdit_5.toPlainText())  # 5000 м\c Скорость истечения топлива, удельный импульс
-    m_t = float(ui.plainTextEdit_6.toPlainText()) # 15 расход топлива кг\с
+    m_t = float(ui.plainTextEdit_6.toPlainText())  # 15 расход топлива кг\с
     orbit = ui.checkBox.isChecked()
     return r_planet, Mp, dry_mass, fuel_mass, u, m_t, orbit
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("[P3135] Симуляция ракеты")
+        MainWindow.setObjectName("[351819] Симуляция запуска ракеты")
         MainWindow.resize(362, 505)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -96,7 +96,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "[P3135 Симуляция ракеты]"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "[351819 Симуляция запуска ракеты]"))
         self.label_6.setText(_translate("MainWindow", "Масса  топлива, кг"))
         self.label_3.setText(_translate("MainWindow", "Масса, (10^24)кг"))
         self.checkBox.setText(_translate("MainWindow", "Запуск на орбите (100км)"))
@@ -108,11 +108,11 @@ class Ui_MainWindow(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Cantarell\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Выполнил: Татаринов К.А.</p>\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">ст. гр. P3135</p>\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Выполнил: Агеев П.А.</p>\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">ст. гр. 351819</p>\n"
 "<p align=\"right\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Преподаватель:</p>\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Зинчик А.А.</p></body></html>"))
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Василишин И.И.</p></body></html>"))
         self.label_8.setText(_translate("MainWindow", "Расход топлива, кг/c"))
         self.plainTextEdit_5.setPlainText(_translate("MainWindow", "5000"))
         self.plainTextEdit_2.setPlainText(_translate("MainWindow", "0.0735"))

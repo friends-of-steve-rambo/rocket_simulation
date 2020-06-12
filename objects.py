@@ -94,7 +94,6 @@ class Rocket(sprite.Sprite):
         self.bitmap = pygame.image.load(filename)
         self.x_size = size[0]
         self.y_size = size[1]
-        self.rect = self.bitmap.get_rect()
         # self.bitmap.set_colorkey((0, 0, 0))
 
     def updatemass(self, dryMass, fuelMass):
@@ -102,20 +101,25 @@ class Rocket(sprite.Sprite):
 
     def rot_center(self, an):
         an = an - 90
-        # Функция разворота спрайта
-        orig_rect = self.bitmap.get_rect()
+        # Функция разворота и скейла спрайта
+        #rot_image = pygame.transform.rotate(self.bitmap, an)
+        #orig_rect = rot_image.get_rect()
+        #rot_rect = orig_rect.copy()
+        #rot_rect.center = rot_image.get_rect().center
+        #rot_image = rot_image.subsurface(rot_rect).copy()
+
         rot_image = pygame.transform.rotate(self.bitmap, an)
-        rot_rect = orig_rect.copy()
-        rot_rect.center = rot_image.get_rect().center
-        rot_image = rot_image.subsurface(rot_rect).copy()
         return rot_image
 
     def render(self, an, h_angle,  zm, p_c, spd_vect):
         x_rend = (planet.x + (self.x - planet.x)*zm) - self.x_size // 2
         y_rend = (planet.y + (self.y - planet.y)*zm) - self.y_size // 2
         if p_c:
-            self.rect = self.rot_center(an)
-            world.blit(self.rect, (x_rend, y_rend))
+            #self.rect = self.rot_center(an)
+            #world.blit(self.rect, (x_rend, y_rend))
+            img = self.rot_center(an)
+            img = pygame.transform.scale(img, (self.x_size, self.y_size))
+            world.blit(img, (x_rend, y_rend))
             # Вектор скорости
             spd_x = cos(radians(spd_vect)) * 35
             spd_y = sin(radians(spd_vect)) * 35
@@ -127,27 +131,34 @@ class Rocket(sprite.Sprite):
                        (WIN_WIDTH//2 - self.x_size//2, WIN_HEIGHT//2 - self.y_size//2))
 
 
-class Solid(sprite.Sprite):
+class Planet(sprite.Sprite):
     def __init__(self, xpos, ypos, color, radius, mass):
         self.x = xpos
         self.y = ypos
         self.color = color
         self.radius = radius
+        self.size = 0
         self.mass = mass
+        self.image = pygame.image.load('img/planet.png')
+        self.image2 = pygame.image.load('img/planet2.png')
 
     def render(self, zm, p_c, dist):
         x_rend = self.x + (self.x-rocket.x)*zm
         y_rend = self.y + (self.y - rocket.y)*zm
+        self.size = int(self.radius*2*zm)
         if p_c:
-            draw.circle(world, self.color, (self.x, self.y), int(self.radius*zm)-5, 0) # -5 пикселей
+            #draw.circle(world, self.color, (self.x, self.y), int(self.radius*zm)-5, 0)  # -5
+            image = pygame.transform.scale(self.image, (self.size, self.size))
+            world.blit(image, (self.x-self.size//2, self.y-self.size//2))
         else:
-            draw.rect(world, self.color, (0, WIN_HEIGHT//2 + dist, WIN_WIDTH, WIN_HEIGHT//2))
-
+            #draw.rect(world, self.color, (0, WIN_HEIGHT//2 + dist, WIN_WIDTH, WIN_HEIGHT//2))
+            image2 = pygame.transform.scale(self.image2, (WIN_WIDTH, WIN_HEIGHT//2))
+            world.blit(image2, (0, WIN_HEIGHT//2 + dist))
 
 # Планета
 x_planet = WIN_WIDTH // 2
 y_planet = WIN_HEIGHT // 2
-planet = Solid(x_planet, y_planet, Color('Dim Gray'), r_planet, Mp)
+planet = Planet(x_planet, y_planet, Color('Dim Gray'), r_planet, Mp)
 
 # Ракета
 x = WIN_WIDTH // 2
