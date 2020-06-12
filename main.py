@@ -28,7 +28,7 @@ def main():
     pygame.mixer.init()
     pygame.mixer.music.load('sound/SpaceOddity.mp3')
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.set_volume(0.1)
     # Подключаем рёв двигателей
     eng_sound = pygame.mixer.Sound('sound/engine.wav')
     eng_sound.set_volume(0.1)
@@ -57,7 +57,6 @@ def main():
     else:
         vx = 0.0
         planet_center = False
-        zoom = 0.25
     vy = 0.0
 
     # Инициализация "часов"
@@ -90,22 +89,22 @@ def main():
             if e.type == USEREVENT + 2:  # Счётчик времени с момента взлёта
                 fly_time += 0.1
             if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_1:
+                if e.key == pygame.K_5:
                     rocket.fuelMass = fuel_mass
-                if e.key == pygame.K_2:
+                if e.key == pygame.K_4:
                     zoom += 0.000005
                     print(zoom)
                 if e.key == pygame.K_3:
                     if zoom > 0.000005:
                         zoom -= 0.000005
-                if e.key == pygame.K_KP_PLUS:
+                if e.key == pygame.K_2:
                     if sim_speed >= 100:
                         sim_speed += 100
                     else:
                         sim_speed += 1 if sim_speed < 10 else 10
                     if sim_speed > 1000:
                         sim_speed = 1000
-                if e.key == pygame.K_KP_MINUS:
+                if e.key == pygame.K_1:
                     if sim_speed > 100:
                         sim_speed -= 100
                     else:
@@ -230,9 +229,11 @@ def main():
 
 
         # Изменение камеры от высоты:
-        #if distance > 300 and not planet_center:
-        #    planet_center = True
-        #zoom = WIN_WIDTH / (planet.radius * 3) if planet_center else 0.25
+        if distance < 300 and planet_center:
+            planet_center = False
+        if distance > 300 and not planet_center:
+            planet_center = True
+            zoom = WIN_WIDTH / (planet.radius * 3)
 
         # Отладка
         if debuginfo:
