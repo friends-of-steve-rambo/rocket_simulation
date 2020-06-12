@@ -28,9 +28,10 @@ def main():
     pygame.mixer.init()
     pygame.mixer.music.load('sound/SpaceOddity.mp3')
     pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.5)
     # Подключаем рёв двигателей
     eng_sound = pygame.mixer.Sound('sound/engine.wav')
-    eng_sound.set_volume(0.02)
+    eng_sound.set_volume(0.1)
 
     # Запуск окна
     pygame.init()
@@ -41,7 +42,7 @@ def main():
     # Флаги остановки, паузы, управления
     done = False  # Флаг завершения игры
     debuginfo = True
-    an_plus = an_minus = False
+    an_plus = an_minus = False  # флаги управления поворотом
     eng_on = False  # Двигатель вкл\выкл
 
     # Максимумы
@@ -84,13 +85,19 @@ def main():
             if e.type == pygame.QUIT:
                 done = True
                 exit()
-            if e.type == USEREVENT + 1: # Вывод отладки по счётчику
+            if e.type == USEREVENT + 1:  # Вывод отладки по счётчику
                 debuginfo = True
-            if e.type == USEREVENT + 2: # Счётчик времени с момента взлёта
+            if e.type == USEREVENT + 2:  # Счётчик времени с момента взлёта
                 fly_time += 0.1
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_1:
                     rocket.fuelMass = fuel_mass
+                if e.key == pygame.K_2:
+                    zoom += 0.000005
+                    print(zoom)
+                if e.key == pygame.K_3:
+                    if zoom > 0.000005:
+                        zoom -= 0.000005
                 if e.key == pygame.K_KP_PLUS:
                     if sim_speed >= 100:
                         sim_speed += 100
@@ -223,9 +230,9 @@ def main():
 
 
         # Изменение камеры от высоты:
-        if distance > 300 and not planet_center:
-            planet_center = True
-        zoom = WIN_WIDTH / (planet.radius * 3) if planet_center else 0.25
+        #if distance > 300 and not planet_center:
+        #    planet_center = True
+        #zoom = WIN_WIDTH / (planet.radius * 3) if planet_center else 0.25
 
         # Отладка
         if debuginfo:
