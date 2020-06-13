@@ -11,6 +11,7 @@ from physics import *
 done_all = False  # Флаг завершения main loop
 zoom = 0.25  # Приближение камеры
 planet_center = False  # Положение камеры
+rocket_center = False  # Костыль для добавления камеры на ракету
 angle = 90  # Угол наклона ракеты
 longitude = 90  # Угол относительно нормали к поверхности планеты
 speed_vect = 90  # Угол относительно вектора скорости
@@ -21,8 +22,8 @@ dt = sim_speed/FPS  # Интервал моделирования
 lag = False  # Флаг на случай просадок фпс для компенсации расчета времени
 
 def main():
-    global zoom, planet_center, angle, longitude, speed_vect, FPS, dt, \
-        landed, lag, sim_speed
+    global zoom, planet_center, rocket_center, angle, \
+        longitude, speed_vect, FPS, dt, landed, lag, sim_speed
 
     # Ставим пластинку с Боуи:
     pygame.mixer.init()
@@ -130,8 +131,10 @@ def main():
                 if e.key == pygame.K_UP:
                     eng_on = True
                 if e.key == pygame.K_LALT:
-                    planet_center = not planet_center
-                    zoom = WIN_WIDTH / (planet.radius * 3) if planet_center else 0.25
+                    if not rocket_center:
+                        rocket_center = True
+                    else:
+                        rocket_center = False
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
@@ -226,9 +229,9 @@ def main():
         max_dist = distance if distance > max_dist else max_dist
 
         # Отрисовка
-        world.fill(Color(background_color))
-        planet.render(zoom, planet_center, distance, gorizontal_distance)
-        rocket.render(angle, h_angle, zoom, planet_center, speed_vect)
+        world.blit(background, background_rect)
+        planet.render(zm=zoom, p_c=planet_center, r_c=rocket_center, dist=distance, gorizontal_distance=gorizontal_distance)
+        rocket.render(an=angle, h_angle=h_angle, zm=zoom, p_c=planet_center, r_c=rocket_center, spd_vect=speed_vect)
         gui.render(int(seconds2), sim_speed, max_speed, max_dist, zoom)
         guid.render(distance, r_speed, vert_speed, eff, pks, h_angle, spd_angle)
         window.blit(world, (0, 0))
@@ -238,6 +241,7 @@ def main():
         # Изменение камеры от высоты:
         if distance < 300 and planet_center:
             planet_center = False
+            zoom = 1
         if distance > 300 and not planet_center:
             planet_center = True
             zoom = WIN_WIDTH / (planet.radius * 3)

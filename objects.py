@@ -2,13 +2,12 @@ import pygame
 from menu import menu
 from math import cos, sin, radians
 from pygame import *
-from settings import DISPLAY, background_color, WIN_WIDTH, WIN_HEIGHT
-from main import zoom, planet_center, angle, longitude, speed_vect, speed1
-
+from settings import DISPLAY, WIN_WIDTH, WIN_HEIGHT
 
 # Инициализация фона-космоса
+background = pygame.image.load('img/starfield.png')
+background_rect = background.get_rect()
 world = pygame.Surface(DISPLAY)
-world.fill(Color(background_color))
 
 pygame.font.init()
 myfont = pygame.font.SysFont("monospace", 15)
@@ -56,7 +55,7 @@ class GUI_d:
         self.topy = 0
 
     def render(self, dist, spd_orb, spd_vert, eng_eff, pks, h_angle, spd_angle):
-        draw.rect(world, self.color, (self.topx, self.topy, WIN_WIDTH-300, self.h))
+        draw.rect(world, self.color, (self.topx, self.topy, WIN_WIDTH-200, self.h))
         # Время и ускорение симуляции
         dist_text = myfont.render("==Высота====Скорость====Верт. ск-ть==", 1, tcolor)
         distval = myfont.render('{: 8d}м{: 11.1f}м/c{:11.1f}м/c'
@@ -111,9 +110,13 @@ class Rocket(sprite.Sprite):
         rot_image = pygame.transform.rotate(self.bitmap, an)
         return rot_image
 
-    def render(self, an, h_angle,  zm, p_c, spd_vect):
-        x_rend = (planet.x + (self.x - planet.x)*zm) - self.x_size // 2
-        y_rend = (planet.y + (self.y - planet.y)*zm) - self.y_size // 2
+    def render(self, an, h_angle,  zm, p_c, r_c, spd_vect):
+        if r_c:
+            x_rend = WIN_WIDTH//2 - self.x_size // 2
+            y_rend = WIN_HEIGHT//2 - self.y_size // 2
+        else:
+            x_rend = (planet.x + self.x * zm) - self.x_size // 2
+            y_rend = (planet.y + self.y * zm) - self.y_size // 2
         if p_c:
             #self.rect = self.rot_center(an)
             #world.blit(self.rect, (x_rend, y_rend))
@@ -150,18 +153,22 @@ class Planet(sprite.Sprite):
         image2.blit(copySurf, (offsetX % width, 0))
         return image2
 
-    def render(self, zm, p_c, dist, gorizontal_distance):
-        x_rend = self.x + (self.x-rocket.x)*zm
-        y_rend = self.y + (self.y - rocket.y)*zm
+    def render(self, zm, p_c, r_c, dist, gorizontal_distance):
         self.size = int(self.radius*2*zm)
+        if r_c:
+            x_rend = WIN_WIDTH//2 - rocket.x*zm - self.size//2
+            y_rend = WIN_HEIGHT//2 - rocket.y*zm - self.size//2
+        else:
+            x_rend = self.x-self.size//2
+            y_rend = self.y-self.size//2
         if p_c:
             #draw.circle(world, self.color, (self.x, self.y), int(self.radius*zm)-5, 0)  # -5
             image = pygame.transform.scale(self.image, (self.size, self.size))
-            world.blit(image, (self.x-self.size//2, self.y-self.size//2))
+            world.blit(image, (x_rend, y_rend))
         else:
             #draw.rect(world, self.color, (0, WIN_HEIGHT//2 + dist, WIN_WIDTH, WIN_HEIGHT//2))
             image2 = self.scrollX(gorizontal_distance)
-            world.blit(image2, (0, WIN_HEIGHT//2 + dist))
+            world.blit(image2, (0, WIN_HEIGHT//2 + dist + rocket.x_size//2))
 
 # Планета
 x_planet = WIN_WIDTH // 2
