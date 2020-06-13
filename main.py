@@ -48,6 +48,8 @@ def main():
     # Максимумы
     max_speed = max_dist = 0.0
 
+    gorizontal_distance = 0
+
     # Начальные условия для ракеты
     eff = 1.0  # Двигатели 100% мощности
     if orbit:
@@ -201,10 +203,15 @@ def main():
         if speed_vect < 0:
             speed_vect = 360 + speed_vect
 
-        # показатели
+        # показатели скоростей
         r_speed = sqrt(vx ** 2 + vy ** 2)
         vert_speed = math.cos(math.radians(abs(speed_vect-longitude))) * r_speed
         pks = speed1(planet.mass, r)
+
+        if not planet_center:
+            gorizontal_speed = -math.sin(math.radians(abs(speed_vect+longitude))) * r_speed
+            gorizontal_distance += gorizontal_speed * dt
+
         # Угол наклона ракеты к горизонту и к скорости
         h_angle = 90-longitude+angle
         if h_angle > 180:
@@ -220,7 +227,7 @@ def main():
 
         # Отрисовка
         world.fill(Color(background_color))
-        planet.render(zoom, planet_center, distance)
+        planet.render(zoom, planet_center, distance, gorizontal_distance)
         rocket.render(angle, h_angle, zoom, planet_center, speed_vect)
         gui.render(int(seconds2), sim_speed, max_speed, max_dist, zoom)
         guid.render(distance, r_speed, vert_speed, eff, pks, h_angle, spd_angle)

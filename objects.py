@@ -142,7 +142,15 @@ class Planet(sprite.Sprite):
         self.image = pygame.image.load('img/planet.png')
         self.image2 = pygame.image.load('img/planet2.png')
 
-    def render(self, zm, p_c, dist):
+    def scrollX(self, offsetX):
+        image2 = pygame.transform.scale(self.image2, (WIN_WIDTH, WIN_HEIGHT // 2))
+        width, height = image2.get_size()
+        copySurf = image2.copy()
+        image2.blit(copySurf, (offsetX % width - width, 0))
+        image2.blit(copySurf, (offsetX % width, 0))
+        return image2
+
+    def render(self, zm, p_c, dist, gorizontal_distance):
         x_rend = self.x + (self.x-rocket.x)*zm
         y_rend = self.y + (self.y - rocket.y)*zm
         self.size = int(self.radius*2*zm)
@@ -152,7 +160,7 @@ class Planet(sprite.Sprite):
             world.blit(image, (self.x-self.size//2, self.y-self.size//2))
         else:
             #draw.rect(world, self.color, (0, WIN_HEIGHT//2 + dist, WIN_WIDTH, WIN_HEIGHT//2))
-            image2 = pygame.transform.scale(self.image2, (WIN_WIDTH, WIN_HEIGHT//2))
+            image2 = self.scrollX(gorizontal_distance)
             world.blit(image2, (0, WIN_HEIGHT//2 + dist))
 
 # Планета
