@@ -37,7 +37,7 @@ def main():
     # Запуск окна
     pygame.init()
     window = pygame.display.set_mode(DISPLAY)
-    pygame.display.set_caption('ИТМО Rocket launcher')
+    pygame.display.set_caption('Симуляция запуска ракеты')
     pygame.display.set_icon(pygame.image.load('img/rocket.png'))
 
     # Флаги остановки, паузы, управления
@@ -229,7 +229,7 @@ def main():
         max_dist = distance if distance > max_dist else max_dist
 
         # Отрисовка
-        world.blit(background, background_rect)
+        world.blit(background, (0, 0, 700, 700))
         planet.render(zm=zoom, p_c=planet_center, r_c=rocket_center, dist=distance, gorizontal_distance=gorizontal_distance)
         rocket.render(an=angle, h_angle=h_angle, zm=zoom, p_c=planet_center, r_c=rocket_center, spd_vect=speed_vect)
         gui.render(int(seconds2), sim_speed, max_speed, max_dist, zoom)
